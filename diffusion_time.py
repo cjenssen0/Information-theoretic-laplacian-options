@@ -8,7 +8,7 @@ def pprint_value(V, max_row, max_col):
         for c in range(max_col):
             val = '{:3.2f}'.format(V[r][c])
             sys.stdout.write(str(val) + ' ')
-        print '\n'
+        print('\n')
 
 def load_option_policies(num_options=4):
     policies = []
@@ -45,7 +45,7 @@ TERMINAL = 4
 states_rc = [(r, c) for r in range(max_row)
              for c in range(max_col)]
 
-opt_policies = load_option_policies(200)
+opt_policies = load_option_policies(8) #200
 
 cache = {}
 for opt_id in range(len(opt_policies)):
@@ -55,10 +55,11 @@ for opt_id in range(len(opt_policies)):
                                      s_id, g_id)
             cache[(opt_id, s_id, g_id)] = (steps, ns)
 
-MAX_OPTIONS = 200
+MAX_OPTIONS = 8
 diffusion_time = np.zeros((MAX_OPTIONS + 1,))
 options_range = range(MAX_OPTIONS + 1)[::-1]
 for num_options in options_range:
+    print(num_options)
     means = []
     for g_id, GOAL in enumerate(states_rc):
         # print g_id
@@ -103,7 +104,7 @@ for num_options in options_range:
         sys.stdout.flush()
     out = 'Num Options: {} | Diffusion Time: {}'.format(num_options,
                                                         np.mean(means))
-    print out
+    print(out)
     diffusion_time[num_options] = np.mean(means)
     # Saving in every iteration
     savename = 'data_files/diffusion_time_values_0_200.txt'

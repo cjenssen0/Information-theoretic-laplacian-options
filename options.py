@@ -72,20 +72,23 @@ class Options(object):
 
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
-        indexes = range(len(w))
-        indexes.sort(key=w.__getitem__)
-        eigenvalues = np.asarray(map(w.__getitem__, indexes))
-        self.eigenvectors = np.asarray(map(v.__getitem__, indexes))
+
+        indexes = np.argsort(w)
+        eigenvalues = w[indexes]
+        self.eigenvectors = v[indexes,:]
+
         # Adding eigenvectors in the opposite directions
         shape = self.eigenvectors.shape
         shape = (shape[0] * 2, shape[1])
         eigenvectors = np.zeros(shape)
+        
         for idx in range(len(self.eigenvectors)):
             v1 = self.eigenvectors[idx] * 1
             # v2 is the opposite eigenvector
             v2 = self.eigenvectors[idx] * -1
             eigenvectors[idx*2] = v1
             eigenvectors[idx*2 + 1] = v2
+
 
         self.eigenvectors = eigenvectors
 
@@ -123,7 +126,7 @@ class Options(object):
     def display_eigenoption(self, display = True, savename='', idx = -1):
         # default return latest learned eigenoption
         if len(self.eigenoptions) < 1 or idx not in range(-1, len(self.eigenoptions)):
-            print "The eigenoption has not been learnt for this option yet"
+            print("The eigenoption has not been learnt for this option yet")
             return
 
         plot_utils.plot_pi(self.eigenoptions[idx], self.max_row,

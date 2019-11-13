@@ -38,14 +38,15 @@ np.set_printoptions(precision=2)
 # Experiment parameter
 num_runs = 100
 num_episodes = 500
-num_options = 200
+num_options = 8
 
 # Starting from the agent with primitive actions, we incrementally add options
 # in explore_agent
 results = np.zeros((num_options+1, num_episodes))
 
 current_num_options = 0
-for i in [0,2,4,8,64,128, 200]:
+#for i in [0,2,4,8,64,128,200]:
+for i in [0,2,4,8]:
     print('Explore Agent with ' + str(i) + ' options...')
     # add option
     while current_num_options < i:
