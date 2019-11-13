@@ -65,19 +65,32 @@ class Options(object):
         diff = D - adjacency
         sq_D = np.sqrt(D) # Diagonal matrix so element-wise operation is ok
         L = np.matmul(sq_D, np.matmul(diff, sq_D))
+        #L = np.exp(-(1 - adjacency)**2 / 0.5)
 
         # extract eigenvalues(w), eigenvectors(v)
-        w, v = np.linalg.eig(L)
-        v = v.T # switch axes to correspond to eigenvalue index
+        w, v = np.linalg.eigh(L)
+
+        idx_s = np.flip(np.argsort(w))
+        w = w[idx_s]
+        v = v[:,idx_s]
+        v_sum = np.dot(v, np.ones_like(w))
+        scores = (np.sqrt(np.abs(w))*v_sum)**2
+        indexes = np.flip(np.argsort(scores))
+        eigenvectors = v[indexes]
 
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
 
-        indexes = np.argsort(w)
+        #indexes = np.argsort(w)
         eigenvalues = w[indexes]
-        self.eigenvectors = v[indexes,:]
+        self.eigenvectors = v[:,indexes]
 
-        # Adding eigenvectors in the opposite directions
+        eigenvectors = v[indexes,:]
+
+        # sort in order of increasing eigenvalue
+        # self.eigenoptions will be computed lazily
+
+        # # Adding eigenvectors in the opposite directions
         shape = self.eigenvectors.shape
         shape = (shape[0] * 2, shape[1])
         eigenvectors = np.zeros(shape)
