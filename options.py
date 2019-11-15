@@ -65,27 +65,36 @@ class Options(object):
         diff = D - adjacency
         sq_D = np.sqrt(D) # Diagonal matrix so element-wise operation is ok
         L = np.matmul(sq_D, np.matmul(diff, sq_D))
-        #L = np.exp(-(1 - adjacency)**2 / 0.5)
+        #L = np.exp(-(1 - adjacency)**2 / 1.0)
+        #L = np.exp(-(L.T*L) / 2.0)
+        #L = np.exp(-(L) / 2.0)
+        #L = diff
+
+        from scipy import linalg
+        w,v = linalg.eigh(L)
+
 
         # extract eigenvalues(w), eigenvectors(v)
-        w, v = np.linalg.eigh(L)
+        #w, v = np.linalg.eigh(L)
 
-        idx_s = np.flip(np.argsort(w))
-        w = w[idx_s]
-        v = v[:,idx_s]
-        v_sum = np.dot(v, np.ones_like(w))
+        #idx_s = np.flip(np.argsort(w))
+        #w = w[idx_s]
+        #v = v[:,idx_s]
+        v_sum = np.dot(v.T, np.ones_like(w))
+        #v_sum = v.sum(0)
         scores = (np.sqrt(np.abs(w))*v_sum)**2
         indexes = np.flip(np.argsort(scores))
-        eigenvectors = v[indexes]
+        #eigenvectors = v[indexes]
 
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
 
         #indexes = np.argsort(w)
-        eigenvalues = w[indexes]
+        #eigenvalues = w[indexes]
         self.eigenvectors = v[:,indexes]
-
-        eigenvectors = v[indexes,:]
+        #self.eigenvectors = v.T
+        #self.eigenvectors = np.concatenate((self.eigenvectors[:,1:], np.zeros((100,1))), axis=1)
+        #eigenvectors = v[indexes,:]
 
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
