@@ -1,3 +1,6 @@
 {
-    "python.pythonPath": "/home/cjei/Apps/miniconda3/envs/spesialPensum/bin/python"
+    "python.pythonPath": "/home/jonas/miniconda2/envs/garage/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true
 }

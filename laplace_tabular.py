@@ -8,8 +8,12 @@ import environment
 import agents
 import options
 
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+
 # Setting up explore_agent which would learn Q-values using options
-explore_env = environment.GridEnvironment()
+explore_env = environment.RoomEnvironment()
 
 max_row, max_col = explore_env.get_grid_dimension() # get dimension of the environment
 explore_agent = agents.OptionExploreQAgent(max_row=max_row, max_col=max_col)
@@ -19,7 +23,7 @@ explore_glue = rlglue.RLGlue(explore_env, explore_agent)
 
 # Setting up reward_agent which would use Q-values learnt by explore_agent
 # to accumulate reward
-reward_env = environment.GridEnvironment()
+reward_env = environment.RoomEnvironment()
 
 max_row, max_col = reward_env.get_grid_dimension() # get dimension of the environment
 reward_agent = agents.QAgent(max_row=max_row, max_col=max_col)
@@ -29,7 +33,7 @@ reward_agent.set_discount(0.9)
 reward_glue = rlglue.RLGlue(reward_env, reward_agent)
 
 # Option object would learn eigen-options for the enviornment
-opt_env = environment.GridEnvironment()
+opt_env = environment.RoomEnvironment()
 opt = options.Options(opt_env, alpha=0.1, epsilon=1.0, discount=0.9)
 
 # Experiment
