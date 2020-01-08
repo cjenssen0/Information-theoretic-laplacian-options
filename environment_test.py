@@ -23,7 +23,7 @@ for i in env.obstacle_vector:
     room[i[0], i[1]] = 1
 
 
-print(room)
+# print(room)
 
 # Copied from the options code
 
@@ -65,33 +65,16 @@ for state in range(total_states):
 # =======================================================================
 # Compute adjacency matrix using RW
 # =======================================================================
-
-adjacency = np.zeros((total_states, total_states), dtype = np.int)
-
-for state in range(total_states):
-    for a in range(default_max_actions):
-        # Take a specified action from a given start state
-        env.set_current_state(state)
-        result = env.step(a)
-        if result['state'] is not None:
-            next_state = result["state"][0]
-
-            if next_state != state:
-                adjacency[state][next_state] = 1
-        else:
-            break
-
-state = 0
 adjacency = np.zeros((total_states, total_states), dtype = np.int)
 
 for state in range(total_states):
 
-    #if env.states_rc[state] in env.obstacle_vector:
-    #    continue
+    if env.states_rc[state] in env.obstacle_vector:
+       continue
 
-    for i in range(5):
+    for i in range(1000):
         env.set_current_state(state)
-        for j in range(200):
+        for j in range(10):
 
             result = env.step(np.random.choice(range(4)))
             if result['state'] is not None:
@@ -102,8 +85,14 @@ for state in range(total_states):
                 adjacency[state][next_state] += 1
                 break
 
+plt.figure(121)
+for i in range(1, 10):
+    plt.subplot(2, 5, i)
+    plt.imshow(np.reshape(adjacency[i-1,:], [11, 11]))
+    plt.show()
 
-# adjacency = adjacency + np.eye(121)
+# raise
+# adjacency = adjacency/10000
 D = np.zeros((total_states, total_states), dtype = np.int)
 
 row_sum = np.sum(adjacency, axis=1)
@@ -124,17 +113,17 @@ L = diff
 
 # Kernelized version
 #L = np.exp(-(1 - adjacency)**2 / 1.0)
-#L = np.exp(-(L.T*L) / 2.0)
+# L = np.exp(-(L.T*L) / 2.0)
 
 # Heat kernel
-t = 1
-L = np.exp(-np.abs(L))
+# t = 1
+# L = np.exp(-np.abs(L))
 
 # Regularized Laplacian kernel
 # L = (np.eye(121) + t*L)**(-1)
 
 
-w,v = linalg.eig(L)
+# w,v = linalg.eigh(L)
 
 # plt.figure()
 # plt.plot(w)
@@ -178,29 +167,32 @@ w,v = linalg.eig(L)
 
 
 ''' Kernel matrix testing '''
-kernel_size = 500
+kernel_size = 1
 # K = np.exp(-0.5*(D)**2/kernel_size)
-K = np.exp(-0.5*(adjacency)**2/kernel_size)
+K = np.exp(-0.5*(adjacency/1000*10)**2/kernel_size)
+# K = np.exp(-0.5*(adjacency)**2/kernel_size)
+# K = adjacency/10000
+
 #new_cool_mat = (adjacency + adjacency.T) / 2
 
-plt.imshow(adjacency+adjacency.T)
-plt.show()
+# plt.imshow(adjacency+adjacency.T)
+# plt.show()
 
-new_cool_mat = 50*np.eye(121)+new_cool_mat
-new_cool_mat = new_cool_mat.max(1)-new_cool_mat
-new_cool_mat = np.dot(new_cool_mat, new_cool_mat.T)
+# new_cool_mat = 50*np.eye(121)+new_cool_mat
+# new_cool_mat = new_cool_mat.max(1)-new_cool_mat
+# new_cool_mat = np.dot(new_cool_mat, new_cool_mat.t)
 
-plt.imshow(new_cool_mat[0].reshape(11, 11))
-plt.show()
-raise
+# plt.imshow(new_cool_mat[0].reshape(11, 11))
+# plt.show()
+# raise
 
 #new_cool_mat = new_cool_mat / new_cool_mat.max(1)
-K = np.exp(-0.5*(new_cool_mat)**2/kernel_size)
-L = np.diag(new_cool_mat.sum(1))-new_cool_mat
+# K = np.exp(-0.5*(new_cool_mat)**2/kernel_size)
+# L = np.diag(new_cool_mat.sum(1))-new_cool_mat
 
 w,v = linalg.eigh(K)
 
-plt.figure(1)
+plt.figure(10)
 plt.stem(w)
 plt.title('Kernel matrix eigvals')
 
@@ -209,8 +201,14 @@ plt.imshow(K)
 plt.colorbar()
 
 plt.figure(3)
-for i in range(1, 5):
-    plt.subplot(2, 2, i)
-    plt.imshow(v[:, -i].reshape(11, 11))
+for i in range(1, 25):
+    plt.subplot(5, 5, i)
+    # plt.imshow(v[:, -i].reshape(11, 11))
+    plt.imshow(v[:, i-1].reshape(11, 11))
+    plt.colorbar()
+
+plt.figure(4)
+plt.imshow(v[:, -1].reshape(11, 11))
+plt.colorbar()
 
 plt.show()
