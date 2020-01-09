@@ -210,6 +210,34 @@ class RoomEnvironment(BaseEnvironment):
                  goal_state, obstacles)
 
 
+class LargeRoomEnvironment(BaseEnvironment):
+    def __init__(self):
+        room_env = [
+            '         X        G',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '                   ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            'XXXX XXXXXXXXX XXXX',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '                   ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            'S        X         '
+        ]
+
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
 
 class I_MazeEnvironment(BaseEnvironment):
     def __init__(self):
