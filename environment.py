@@ -240,6 +240,36 @@ class LargeRoomEnvironment(BaseEnvironment):
                  goal_state, obstacles)
 
 
+class AsymmetricRoomEnvironment(BaseEnvironment):
+    def __init__(self):
+        room_env = [
+            '         X        G',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '                   ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            'XXXX XXXXX         ',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            '                   ',
+            '         XXXXX XXXX',
+            '         X         ',
+            '         X         ',
+            '         X         ',
+            'S        X         '
+        ]
+
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
+
+
 class ClosedRoomEnvironment(BaseEnvironment):
     def __init__(self):
         room_env = [
