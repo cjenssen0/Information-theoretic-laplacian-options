@@ -45,33 +45,46 @@ class Options(object):
 
         total_states = len(states_rc)
 
-        # Compute adjacency matrix (take all possible actions from every state)
+        #-- Compute adjacency matrix (take all possible actions from every state)
         adjacency = np.zeros((total_states, total_states), dtype = np.int)
+
         for state in range(total_states):
-            for a in range(default_max_actions):
-                # Take a specified action from a given start state
+
+            if self.env.states_rc[state] in self.env.obstacle_vector:
+                continue
+        # Jonas flipped these: starting over again many times and not walking to far seems to give something that looks more like a kernel..
+            for i in range(1000):
                 self.env.set_current_state(state)
-                result = self.glue.environment.step(a)
-                next_state = result["state"][0]
-                if next_state != state:
-                    adjacency[state][next_state] = 1
+                for j in range(5):
 
-        D = np.zeros((total_states, total_states), dtype = np.int)
+                    result = self.env.step(np.random.choice(range(4)))
+                    if result['state'] is not None:
+                        next_state = result['state'][0]
 
-        row_sum = np.sum(adjacency, axis=1)
-        for state in range(total_states):
-           D[state][state] = row_sum[state]
+                        adjacency[state][next_state] += 1
+                    else:
+                        adjacency[state][next_state] += 1
+                        break
 
-        diff = D - adjacency
-        sq_D = np.sqrt(D) # Diagonal matrix so element-wise operation is ok
-        L = np.matmul(sq_D, np.matmul(diff, sq_D))
-        #L = np.exp(-(1 - adjacency)**2 / 1.0)
-        #L = np.exp(-(L.T*L) / 2.0)
-        #L = np.exp(-(L) / 2.0)
-        #L = diff
+        adj_diag = 1000*np.eye(total_states) + adjacency
+        #-- Creating a kernel matrix out of the random walk adjacency graph
+        def check_symmetric(a, rtol=1e-05, atol=1e-08):
+            return np.allclose(a, a.T, rtol=rtol, atol=atol)
+
+        print(check_symmetric(adj_diag))
+        adj_sym = adj_diag +adj_diag.T
+
+        print(check_symmetric(adj_sym))
+        dis_mat = (adj_sym.max(1, keepdims=True)-adj_sym)/(adj_sym.max(1, keepdims=True)+0.0001)
+
+        # kernel_size = 0.1 # <- Gives bullshait
+        kernel_size = 0.45
+        # kernel_size = 2 # <- Similar to 0.45, but more smoothing
+        K = np.exp(-0.5*(dis_mat**2/kernel_size**2))
+        #--
 
         from scipy import linalg
-        w,v = linalg.eigh(L)
+        w, v = linalg.eigh(K)
 
 
         # extract eigenvalues(w), eigenvectors(v)
@@ -83,10 +96,14 @@ class Options(object):
         v_sum = np.dot(v.T, np.ones_like(w))
         #v_sum = v.sum(0)
         scores = (np.sqrt(np.abs(w))*v_sum)**2
+
+        #---IT---
         indexes = np.flip(np.argsort(scores))
         #eigenvectors = v[indexes]
 
-        # sort in order of increasing eigenvalue
+        #---OG---: sort in order of increasing eigenvalue
+        #indexes = np.argsort(w)
+
         # self.eigenoptions will be computed lazily
 
         #indexes = np.argsort(w)
