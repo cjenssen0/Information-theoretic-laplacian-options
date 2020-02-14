@@ -191,17 +191,17 @@ class GridEnvironment(BaseEnvironment):
 class RoomEnvironment(BaseEnvironment):
     def __init__(self):
         room_env = [
-            '     X    G',
-            '     X     ',
-            '           ',
-            '     X     ',
-            '     X     ',
-            'X XXXX     ',
-            '     XXX XX',
-            '     X     ',
-            '     X     ',
-            '           ',
-            'S    X     '
+            '     XX    G',
+            '     XX     ',
+            '            ',
+            '     XX     ',
+            '     XX     ',
+            'X XXXX      ',
+            'X XXXXXXX XX',
+            '     XXX  XX',
+            '     XX     ',
+            '            ',
+            'S    XX     '
         ]
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
@@ -243,7 +243,7 @@ class LargeRoomEnvironment(BaseEnvironment):
 class AsymmetricRoomEnvironment(BaseEnvironment):
     def __init__(self):
         room_env = [
-            '         X        G',
+            '         X         ',
             '         X         ',
             '         X         ',
             '         X         ',

@@ -2,14 +2,16 @@ import sys
 import numpy as np
 import pickle
 import copy
+import time
 
 import rlglue
 import environment
 import agents
+# import options_kernel_matrix as options
 import options
 
 import matplotlib
-matplotlib.use('agg')
+# matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 # Setting up explore_agent which would learn Q-values using options
@@ -42,7 +44,7 @@ np.set_printoptions(precision=2)
 # Experiment parameter
 num_runs = 100
 num_episodes = 500
-num_options = 8
+num_options = 64
 
 # Starting from the agent with primitive actions, we incrementally add options
 # in explore_agent
@@ -50,7 +52,8 @@ results = np.zeros((num_options+1, num_episodes))
 
 current_num_options = 0
 #for i in [0,2,4,8,64,128,200]:
-for i in [0,2,4,8]:
+start_time = time.time()
+for i in [0,2,4,8, 64]:
     print('Explore Agent with ' + str(i) + ' options...')
     # add option
     while current_num_options < i:
@@ -78,3 +81,5 @@ for i in [0,2,4,8]:
     cum_reward /= float(num_runs)
     results[i] = cum_reward
 np.save('data_files/average_return', results)
+
+print('Total running time: ', time.time()-start_time)

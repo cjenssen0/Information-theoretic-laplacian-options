@@ -4,6 +4,7 @@ import rlglue
 import environment
 import agents
 import plot_utils
+from sklearn.metrics import pairwise_distances
 
 
 class Options(object):
@@ -33,6 +34,9 @@ class Options(object):
         self.compute_eigen()
 
     def compute_eigen(self):
+        ''' Computes eigenvectors using the Kernel matrix instead of
+        the Laplacian
+        '''
 
         # Need to exclude Terminate Action
         default_max_actions = self.env.get_default_max_actions()
@@ -57,25 +61,21 @@ class Options(object):
                     adjacency[state][next_state] = 1
 
 
-        # Back to the original solution!
-        D = np.zeros((total_states, total_states), dtype = np.int)
+        D_mat = pairwise_distances(states_rc)
+        sigma = 2
+        K = np.exp(-D_mat**2 / sigma)
 
-        row_sum = np.sum(adjacency, axis=1)
-        for state in range(total_states):
-           D[state][state] = row_sum[state]
-
-        diff = D - adjacency
-        sq_D = np.sqrt(D) # Diagonal matrix so element-wise operation is ok
-        L = np.matmul(sq_D, np.matmul(diff, sq_D))
+        # Using only the TD connected components
+        K = K * adjacency
 
         # extract eigenvalues(w), eigenvectors(v)
-        w, v = np.linalg.eig(L)
+        w, v = np.linalg.eig(K)
         v = v.T # switch axes to correspond to eigenvalue index
 
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
 
-        indexes = np.argsort(w)
+        indexes = np.flip(np.argsort(w), 0)
         # eigenvalues = w[indexes]
         self.eigenvectors = v[indexes,:]
 
