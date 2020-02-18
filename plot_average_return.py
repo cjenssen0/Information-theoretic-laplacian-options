@@ -5,6 +5,7 @@ import sys
 if __name__ == "__main__":
    results = np.load('data_files/average_return.npy')
    # results = np.load('data_files/average_return_K.npy')
+   # results = np.load('data_files/average_return_OG.npy')
 
    plt.show()
    x_legend = range(len(results[0][:]))
@@ -19,5 +20,6 @@ if __name__ == "__main__":
    plt.legend(handles=[graph_agent_0, graph_agent_2, graph_agent_4, graph_agent_8, graph_agent_64])#, graph_agent_128, graph_agent_200])
    plt.xlabel('Episodes')
    plt.ylabel('Average return')
-   plt.xlim(0,100)
+   plt.xlim(0,500)
    plt.show()
+   
