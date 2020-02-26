@@ -80,6 +80,6 @@ for i in [0,2,4,8, 64]:
         explore_glue.cleanup()
     cum_reward /= float(num_runs)
     results[i] = cum_reward
-np.save('data_files/average_return', results)
+np.save('data_files/average_return_og', results)
 
 print('Total running time: ', time.time()-start_time)

@@ -77,7 +77,7 @@ class Options(object):
 
         indexes = np.argsort(w)
         # eigenvalues = w[indexes]
-        self.eigenvectors = v[indexes,:]
+        self.eigenvectors = v[indexes, :]
 
         # Adding eigenvectors in the opposite directions
         shape = self.eigenvectors.shape
