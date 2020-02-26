@@ -49,24 +49,52 @@ class Options(object):
 
         total_states = len(states_rc)
 
+        # ===============================================================================
         # Compute adjacency matrix (take all possible actions from every state)
+        # ===============================================================================
+        # adjacency = np.zeros((total_states, total_states), dtype = np.int)
+        # for state in range(total_states):
+            # for a in range(default_max_actions):
+                # # Take a specified action from a given start state
+                # self.env.set_current_state(state)
+                # result = self.glue.environment.step(a)
+                # next_state = result["state"][0]
+                # if next_state != state:
+                    # adjacency[state][next_state] = 1
+
+        # =======================================================================
+        # Compute adjacency matrix using RW
+        # =======================================================================
         adjacency = np.zeros((total_states, total_states), dtype = np.int)
+
         for state in range(total_states):
-            for a in range(default_max_actions):
-                # Take a specified action from a given start state
+
+            if self.env.states_rc[state] in self.env.obstacle_vector:
+               continue
+
+            for i in range(100):
                 self.env.set_current_state(state)
-                result = self.glue.environment.step(a)
-                next_state = result["state"][0]
-                if next_state != state:
-                    adjacency[state][next_state] = 1
+                for j in range(10):
+
+                    result = self.env.step(np.random.choice(range(4)))
+                    if result['state'] is not None:
+                        next_state = result['state'][0]
+
+                        adjacency[state][next_state] = 1 # Only add connection
+                        # adjacency[state][next_state] += 1
+                    else:
+                        adjacency[state][next_state] = 1 # Only add connection
+                        # adjacency[state][next_state] += 1
+                        break
 
 
+        # Creating a pairwise distance matrix
         D_mat = pairwise_distances(states_rc)
         sigma = 2
         K = np.exp(-D_mat**2 / sigma)
 
-        # Using only the TD connected components
-        K = K * adjacency
+        # Using only the TD connected components + ones along the diagonal
+        K = K * (adjacency + np.identity(K.shape[0]))
 
         # extract eigenvalues(w), eigenvectors(v)
         w, v = np.linalg.eig(K)
@@ -75,6 +103,7 @@ class Options(object):
         # sort in order of increasing eigenvalue
         # self.eigenoptions will be computed lazily
 
+        # Flipping the eigenvectors matrix to account for opposite sorting
         indexes = np.flip(np.argsort(w), 0)
         # eigenvalues = w[indexes]
         self.eigenvectors = v[indexes,:]
@@ -122,7 +151,7 @@ class Options(object):
         # return newly learned policy
         return self.eigenoptions[-1]
 
-    def get_eigenoptions(self):        
+    def get_eigenoptions(self):
         return self.eigenoptions
 
     # display eigenoption at the idx

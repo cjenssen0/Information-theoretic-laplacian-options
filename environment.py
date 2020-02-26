@@ -261,7 +261,7 @@ class AsymmetricRoomEnvironment(BaseEnvironment):
             '         X         ',
             '         X         ',
             '         X         ',
-            'S        X         '
+            'S        X        G'
         ]
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)

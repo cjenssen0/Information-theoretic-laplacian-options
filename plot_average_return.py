@@ -19,5 +19,5 @@ if __name__ == "__main__":
    plt.legend(handles=[graph_agent_0, graph_agent_2, graph_agent_4, graph_agent_8, graph_agent_64])#, graph_agent_128, graph_agent_200])
    plt.xlabel('Episodes')
    plt.ylabel('Average return')
-   plt.xlim(0,100)
+   # plt.xlim(0,101)
    plt.show()

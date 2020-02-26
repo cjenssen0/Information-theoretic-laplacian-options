@@ -151,6 +151,9 @@ K = K * adjacency
 # ======================
 
 
+# ==========================
+# Calculating eigenvectors
+# ==========================
 # w,v = linalg.eigh(L)
 w,v = linalg.eigh(K)
 

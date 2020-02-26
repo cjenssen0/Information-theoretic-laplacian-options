@@ -122,7 +122,7 @@ class Options(object):
         # return newly learned policy
         return self.eigenoptions[-1]
 
-    def get_eigenoptions(self):        
+    def get_eigenoptions(self):
         return self.eigenoptions
 
     # display eigenoption at the idx

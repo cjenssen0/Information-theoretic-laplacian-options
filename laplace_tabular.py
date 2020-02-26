@@ -7,15 +7,15 @@ import time
 import rlglue
 import environment
 import agents
-# import options_kernel_matrix as options
-import options
+import options_kernel_matrix as options
+# import options
 
 import matplotlib
 # matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 # Setting up explore_agent which would learn Q-values using options
-explore_env = environment.RoomEnvironment()
+explore_env = environment.AsymmetricRoomEnvironment()
 
 max_row, max_col = explore_env.get_grid_dimension() # get dimension of the environment
 explore_agent = agents.OptionExploreQAgent(max_row=max_row, max_col=max_col)
