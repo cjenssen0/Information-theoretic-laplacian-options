@@ -7,8 +7,8 @@ import time
 import rlglue
 import environment
 import agents
-import options_kernel_matrix as options
-# import options
+# import options_kernel_matrix as options
+import options
 
 import matplotlib
 # matplotlib.use('agg')
@@ -25,7 +25,7 @@ explore_glue = rlglue.RLGlue(explore_env, explore_agent)
 
 # Setting up reward_agent which would use Q-values learnt by explore_agent
 # to accumulate reward
-reward_env = environment.RoomEnvironment()
+reward_env = environment.AsymmetricRoomEnvironment()
 
 max_row, max_col = reward_env.get_grid_dimension() # get dimension of the environment
 reward_agent = agents.QAgent(max_row=max_row, max_col=max_col)
@@ -35,7 +35,7 @@ reward_agent.set_discount(0.9)
 reward_glue = rlglue.RLGlue(reward_env, reward_agent)
 
 # Option object would learn eigen-options for the enviornment
-opt_env = environment.RoomEnvironment()
+opt_env = environment.AsymmetricRoomEnvironment()
 opt = options.Options(opt_env, alpha=0.1, epsilon=1.0, discount=0.9)
 
 # Experiment
@@ -44,7 +44,7 @@ np.set_printoptions(precision=2)
 # Experiment parameter
 num_runs = 100
 num_episodes = 500
-num_options = 64
+num_options = 30
 
 # Starting from the agent with primitive actions, we incrementally add options
 # in explore_agent
@@ -53,7 +53,7 @@ results = np.zeros((num_options+1, num_episodes))
 current_num_options = 0
 #for i in [0,2,4,8,64,128,200]:
 start_time = time.time()
-for i in [0,2,4,8, 64]:
+for i in [0,2,4,8, 30]:
     print('Explore Agent with ' + str(i) + ' options...')
     # add option
     while current_num_options < i:
