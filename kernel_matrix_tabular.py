@@ -7,8 +7,8 @@ import time
 import rlglue
 import environment
 import agents
-# import options_kernel_matrix as options
-import options
+import options_kernel_matrix as options
+# import options
 
 import matplotlib
 # matplotlib.use('agg')
@@ -80,6 +80,6 @@ for i in [0,2,4,8, 30]:
         explore_glue.cleanup()
     cum_reward /= float(num_runs)
     results[i] = cum_reward
-    np.save('data_files/average_return_laplace', results)
+    np.save('data_files/average_return_kernel_matrix', results)
 
 print('Total running time: ', time.time()-start_time)
