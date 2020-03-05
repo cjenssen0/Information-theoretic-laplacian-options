@@ -1,0 +1,21 @@
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: keca-options
+spec:
+  template:
+    spec:
+      containers:
+      - name: keca-options
+        image: 'python'
+        workingDir: /storage
+        command: ["sh", "keca-options.sh"]
+        volumeMounts:
+        - name: storage
+          mountPath: /storage
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: storage
+      restartPolicy: OnFailure
+  backoffLimit: 0
