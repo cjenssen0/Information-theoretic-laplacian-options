@@ -7,9 +7,10 @@ spec:
     spec:
       containers:
       - name: keca-options
-        image: 'python'
+        #image: 'tensorflow/tensorflow'
+        image: 'faizanbashir/python-datascience'
         workingDir: /storage
-        command: ["sh", "keca-options.sh"]
+        command: ["sh", "./keca_options_rl/keca-options.sh"]
         volumeMounts:
         - name: storage
           mountPath: /storage
