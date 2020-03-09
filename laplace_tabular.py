@@ -42,8 +42,8 @@ opt = options.Options(opt_env, alpha=0.1, epsilon=1.0, discount=0.9)
 np.set_printoptions(precision=2)
 
 # Experiment parameter
-num_runs = 100
-num_episodes = 500
+num_runs = 300
+num_episodes = 1000
 num_options = 30
 
 # Starting from the agent with primitive actions, we incrementally add options
