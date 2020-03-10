@@ -106,7 +106,8 @@ class Options(object):
 
         information_potential = (np.sqrt(w)*v_sum)**2
 
-        indexes = np.flip(np.argsort(information_potential), 0)
+        # indexes = np.flip(np.argsort(information_potential), 0)
+        indexes = (np.argsort(information_potential), 0)
 
         self.eigenvectors = v[indexes,:]
 
