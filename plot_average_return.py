@@ -7,6 +7,8 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('file', type=str,
                     help='Name of average return file to load.')
+parser.add_argument('--xlim', type=int, default=500,
+                    help='Name of average return file to load.')
 
 args = parser.parse_args()
 
@@ -28,6 +30,5 @@ if __name__ == "__main__":
    plt.legend(handles=[graph_agent_0, graph_agent_2, graph_agent_4, graph_agent_8, graph_agent_64])#, graph_agent_128, graph_agent_200])
    plt.xlabel('Episodes')
    plt.ylabel('Average return')
-   # plt.xlim(0,101)
-   plt.xlim(0,500)
+   plt.xlim(0, args.xlim)
    plt.show()
