@@ -9,6 +9,8 @@ parser.add_argument('file', type=str,
                     help='Name of average return file to load.')
 parser.add_argument('--xlim', type=int, default=500,
                     help='Name of average return file to load.')
+parser.add_argument('--savefig', type=str,
+                    help='Name of file to save fig.')
 
 args = parser.parse_args()
 
@@ -31,4 +33,8 @@ if __name__ == "__main__":
    plt.xlabel('Episodes')
    plt.ylabel('Average return')
    plt.xlim(0, args.xlim)
-   plt.show()
+
+   if args.savefig is not None:
+       plt.savefig(args.savefig)
+   else:
+       plt.show()
