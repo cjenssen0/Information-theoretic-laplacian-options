@@ -10,9 +10,9 @@ cd Information-theoretic-laplacian-options/
 
 pip install rlglue
 
-echo 'Runnning laplace tabular'
-python laplace_tabular.py
+#echo 'Runnning laplace tabular'
+#python laplace_tabular.py
 echo 'Runnning keca tabular'
 python keca_tabular.py
-echo 'Runnning kpca tabular'
-python kernel_matrix_tabular.py
+#echo 'Runnning kpca tabular'
+#python kernel_matrix_tabular.py

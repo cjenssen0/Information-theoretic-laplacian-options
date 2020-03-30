@@ -10,7 +10,7 @@ def plot_pi(pi, max_row, max_col, display=True, savename=''):
     # Right, Left, Down, Up, Terminate
     action_set = [(1,0), (-1,0), (0,-1), (0,1), (0, 0)]
     vector_pi = [action_set[i] for i in pi]
-   
+
     # Create grid
     Col, Row = np.meshgrid(range(0,max_col,1), range(0,max_row,1))
 
@@ -34,7 +34,7 @@ def plot_pi(pi, max_row, max_col, display=True, savename=''):
     if display:
         plt.show()
     plt.close()
-    
+
 def pprint_pi(pi, max_row, max_col):
     action_set = ['R', 'L', 'D', 'U', 'T']
     count = 0
