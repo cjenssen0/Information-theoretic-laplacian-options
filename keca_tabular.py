@@ -52,7 +52,7 @@ results = np.zeros((num_options+1, num_episodes))
 current_num_options = 0
 #for i in [0,2,4,8,64,128,200]:
 start_time = time.time()
-for i in [0,2,4,8, 30]:
+for i in [0,2,4,8,30]:
     print('Explore Agent with ' + str(i) + ' options...')
     # add option
     while current_num_options < i:
