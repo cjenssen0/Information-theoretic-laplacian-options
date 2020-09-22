@@ -14,7 +14,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 # Setting up explore_agent which would learn Q-values using options
-explore_env = environment.AsymmetricRoomEnvironment()
+# explore_env = environment.AsymmetricRoomEnvironment()
+explore_env = environment.ToyMDPAsymmetric()
 
 max_row, max_col = explore_env.get_grid_dimension() # get dimension of the environment
 explore_agent = agents.OptionExploreQAgent(max_row=max_row, max_col=max_col)
@@ -24,7 +25,8 @@ explore_glue = rlglue.RLGlue(explore_env, explore_agent)
 
 # Setting up reward_agent which would use Q-values learnt by explore_agent
 # to accumulate reward
-reward_env = environment.AsymmetricRoomEnvironment()
+# reward_env = environment.AsymmetricRoomEnvironment()
+reward_env = environment.ToyMDPAsymmetric()
 
 max_row, max_col = reward_env.get_grid_dimension() # get dimension of the environment
 reward_agent = agents.QAgent(max_row=max_row, max_col=max_col)
@@ -34,7 +36,8 @@ reward_agent.set_discount(0.9)
 reward_glue = rlglue.RLGlue(reward_env, reward_agent)
 
 # Option object would learn eigen-options for the enviornment
-opt_env = environment.AsymmetricRoomEnvironment()
+# opt_env = environment.AsymmetricRoomEnvironment()
+opt_env = environment.ToyMDPAsymmetric()
 opt = options.Options(opt_env, alpha=0.1, epsilon=1.0, discount=0.9)
 
 # Experiment
@@ -79,6 +82,7 @@ for i in [0,2,4,8,30]:
         explore_glue.cleanup()
     cum_reward /= float(num_runs)
     results[i] = cum_reward
-    np.save('data_files/average_return_keca', results)
+    # np.save('data_files/average_return_keca', results)
+    np.save('data_files/average_return_keca_toyAsymmetric', results)
 
 print('Total running time: ', time.time()-start_time)

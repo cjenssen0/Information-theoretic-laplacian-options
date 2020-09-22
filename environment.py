@@ -191,19 +191,18 @@ class GridEnvironment(BaseEnvironment):
 class RoomEnvironment(BaseEnvironment):
     def __init__(self):
         room_env = [
-            '     XX    G',
-            '     XX     ',
-            '            ',
-            '     XX     ',
-            '     XX     ',
-            'X XXXX      ',
-            'X XXXXXXX XX',
-            '     XXX  XX',
-            '     XX     ',
-            '            ',
-            'S    XX     '
+            '     X    G',
+            '     X     ',
+            '           ',
+            '     X     ',
+            '     X     ',
+            'X XXXX     ',
+            '     XXX XX',
+            '     X     ',
+            '     X     ',
+            '           ',
+            'S    X     '
         ]
-
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
 
         BaseEnvironment.__init__(self, max_row, max_col, start_state,
@@ -323,6 +322,47 @@ class LargeDoorsRoomEnvironment(BaseEnvironment):
             '         X         ',
             'S        X         '
         ]
+
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
+
+
+class ToyMDP(BaseEnvironment):
+    def __init__(self):
+        # room_env = [
+            # '   XXXXXXX  X ',
+            # '    XXXXXX    ',
+            # '   XXXXXX     ',
+            # '   XXXXXXX    ',
+            # '   XXXXXXX    ',
+            # ' X XXXXXXXXX X',
+            # ]
+        room_env = [
+            '   XXXXXXX  X ',
+            '    XXXXXX   G',
+            '   XXXXXX     ',
+            '              ',
+            '   XXXXXXX    ',
+            ' X XXXXXXXXX X',
+            ]
+
+        max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
+
+        BaseEnvironment.__init__(self, max_row, max_col, start_state,
+                 goal_state, obstacles)
+
+
+class ToyMDPAsymmetric(BaseEnvironment):
+    def __init__(self):
+        room_env = [
+            'X XXXXXXX    G',
+            'XX XXXXXX    X',
+            '         X    ',
+            'X  XXXXXX    X',
+            ' XXXXXXXX   X ',
+            ]
 
         max_row, max_col, start_state, goal_state, obstacles = parse_env(room_env)
 
